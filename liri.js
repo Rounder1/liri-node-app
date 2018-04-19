@@ -78,6 +78,29 @@ if (inputString[2] === "spotify-this-song") {
 
 if (inputString[2] === "movie-this") {
 
+    var movieName = "";
+
+    for (var i = 3; i < inputString.length; i++) {
+        movieName = movieName + "+" + inputString[i];
+    }
+
+    // Then run a request to the OMDB API with the movie specified
+var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+
+// This line is just to help us debug against the actual URL.
+console.log(queryUrl);
+
+request(queryUrl, function(error, response, body) {
+    if (error) {
+        console.log('Error occurred: ' + error);
+        return; 
+    }
+
+    console.log(JSON.parse(body));
+    // TODO: add correct data to be displayed
+  
+});
+
 }
 
 
