@@ -101,16 +101,6 @@ request(queryUrl, function(error, response, body) {
     }
 
     console.log(JSON.parse(body));
-   // console.log(JSON.parse(body.title));
-    //console.log(body.year);
-    // console.log("IMDB Rating " + body.ratings[0].value);
-    // console.log("IMDB Rating " + body.ratings[1].value);
-    //console.log(body.country);
-    //console.log(body.language);
-    //console.log(body.plot);
-    //console.log(body.actors);
-    
-    // TODO: add correct data to be displayed
   
 });
 
@@ -125,7 +115,6 @@ if (inputString[2] === "do-what-it-says") {
           return console.log(err);
         }
     
-        // Break down all the numbers inside
         data = data.split(",");
         
         searchSpotify(data[1]);
