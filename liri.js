@@ -1,13 +1,33 @@
 require("dotenv").config();
 var keys = require("./keys.js");
 var request = require("request");
+var fs = require("fs");
 
 var Spotify1 = require("node-spotify-api");
 var Twitter = require('twitter');
 var spotify = new Spotify1(keys.spotify);
 var client = new Twitter(keys.twitter);
-// use require for the OMDB api, in the ajax giffy homework you can find the key
 var inputString = process.argv;
+
+function searchSpotify (mySong) {
+
+    spotify.search({ type: 'track', query: mySong}, function(err, data) { 
+        if (err) {
+            console.log('Error occurred: ' + err);
+            return; 
+        }
+            console.log(song);
+        
+            // console.log(JSON.stringify(data.tracks.items[0], null, 2));
+            var songInfo = data.tracks.items[0];
+
+            console.log(songInfo.artists[0].name);
+            console.log(songInfo.name);
+            console.log(songInfo.preview_url);
+            console.log(songInfo.album.name);
+    });
+
+}
 
 
 if (inputString[2] === "my-tweets") {    
@@ -45,7 +65,6 @@ if (inputString[2] === "spotify-this-song") {
                 console.log('Error occurred: ' + err);
                 return; 
             }
-                //console.log(JSON.stringify(data.tracks.items[5].artists[0].name, null, 2));
 
                 var songAce = data.tracks.items[5];
 
@@ -57,21 +76,8 @@ if (inputString[2] === "spotify-this-song") {
         
     } else {
 
-        spotify.search({ type: 'track', query: song}, function(err, data) { 
-            if (err) {
-                console.log('Error occurred: ' + err);
-                return; 
-            }
-                console.log(song);
-            
-                // console.log(JSON.stringify(data.tracks.items[0], null, 2));
-                var songInfo = data.tracks.items[0];
-
-                console.log(songInfo.artists[0].name);
-                console.log(songInfo.name);
-                console.log(songInfo.preview_url);
-                console.log(songInfo.album.name);
-        });  
+        searchSpotify(song);
+  
     }  
 }
 
@@ -84,11 +90,9 @@ if (inputString[2] === "movie-this") {
         movieName = movieName + "+" + inputString[i];
     }
 
-    // Then run a request to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    if (movieName === "") {movieName = "Mr. Nobody";}
 
-// This line is just to help us debug against the actual URL.
-console.log(queryUrl);
+var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
 request(queryUrl, function(error, response, body) {
     if (error) {
@@ -97,6 +101,15 @@ request(queryUrl, function(error, response, body) {
     }
 
     console.log(JSON.parse(body));
+   // console.log(JSON.parse(body.title));
+    //console.log(body.year);
+    // console.log("IMDB Rating " + body.ratings[0].value);
+    // console.log("IMDB Rating " + body.ratings[1].value);
+    //console.log(body.country);
+    //console.log(body.language);
+    //console.log(body.plot);
+    //console.log(body.actors);
+    
     // TODO: add correct data to be displayed
   
 });
@@ -104,9 +117,20 @@ request(queryUrl, function(error, response, body) {
 }
 
 
-/*
+
 if (inputString[2] === "do-what-it-says") {
 
+    fs.readFile("random.txt", "utf8", function(err, data) {
+        if (err) {
+          return console.log(err);
+        }
+    
+        // Break down all the numbers inside
+        data = data.split(",");
+        
+        searchSpotify(data[1]);
+
+      });
 }
-*/
+
    
